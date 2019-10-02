@@ -1,0 +1,28 @@
+---
+
+- hosts: all
+  become: true
+
+  tasks:
+  - name: stopping docker container
+    command: docker stop tomcat-test
+    ignore_errors: yes
+
+  - name: removing stopped docker container
+    command: docker rm tomcat-test
+    ignore_errors: yes
+
+  - name: removing old image
+    command: docker rmi custom-tomcat:new
+    ignore_errors: yes
+
+#  - name: building docker image
+#    command: docker build -t custom-tomcat:new .
+#    args:
+#     chdir: /opt/docker
+
+  - name: pull docker image from dockerhub
+    command: docker pull rakesh22a/demo-test1:latest
+
+  - name: creating docker conatiner
+    command: docker run -d --name tomcat-test -p 8080:8080 rakesh22a/demo-test1

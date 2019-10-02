@@ -1,0 +1,20 @@
+---
+
+- hosts: all
+  become: ture
+
+  tasks:
+  - name: creating docker image using warfile
+    command: docker build -t custom-tomcat:new .
+    args:
+     chdir: /opt/docker
+
+  - name: Create tag to image
+    command: docker tag custom-tomcat:new rakesh22a/demo-test1
+
+  - name: Push Image to docker hub
+    command: docker push rakesh22a/demo-test1
+
+  - name: remove image from local host
+    command: docker rmi rakesh22a/demo-test1 custom-tomcat:new
+    ignore_errors: yes
